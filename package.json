@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.12.0"
+  },
+  "name": "my_db_connection",
+  "version": "1.0.0",
+  "description": "mysql_db_setup",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dexb12/mysql_db_connection.git"
+  },
+  "author": "Dexter Balindres",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dexb12/mysql_db_connection/issues"
+  },
+  "homepage": "https://github.com/dexb12/mysql_db_connection#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
