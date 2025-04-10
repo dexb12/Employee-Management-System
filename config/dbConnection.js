@@ -15,3 +15,5 @@ pool.getConnection((err) => {
   if (err) throw err;
   console.log("MySQL Database Connected!");
 });
+
+module.exports = pool;
