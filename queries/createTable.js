@@ -1,22 +1,37 @@
-require("dotenv").config();
 const pool = require("../config/dbConnection");
 
-const createTableQuery = `
-    CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP   
-    )
+const createEmployeesTable = `
+    CREATE TABLE IF NOT EXISTS employees (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        department VARCHAR(100),
+        position VARCHAR(100),
+        hired_date DATE DEFAULT (CURRENT_DATE),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
 `;
 
-console.log("Database name in createTable.js:", process.env.DATABASE_NAME);
-console.log("DB_Password in createTable.js:", process.env.MYSQL_PASSWORD);
+const createAttendanceTable = `
+    CREATE TABLE IF NOT EXISTS attendance (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        employee_id INT NOT NULL,
+        check_in TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        check_out TIMESTAMP,
+        FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE
+    );
+`;
 
-pool.query(createTableQuery, (err, result) => {
-  if (err) {
-    console.error("Error creating table:", err.message);
-    return;
+async function initTables() {
+  try {
+    await pool.query(createEmployeesTable);
+    console.log("Employees table successfully created");
+    await pool.query(createAttendanceTable);
+    console.log("Attendance table successfully created");
+  } catch (error) {
+    console.log("Error creating table", error);
   }
-  console.log("Users table created successfully!");
-});
+}
+
+initTables();
