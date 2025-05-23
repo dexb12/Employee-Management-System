@@ -1,6 +1,6 @@
 const pool = require("../config/dbConnection");
 
-const getAllEmployee = async () => {
+const getAllEmployees = async () => {
   const [rows] = await pool.query(`SELECT * FROM employees`);
   return rows;
 };
@@ -86,7 +86,7 @@ const deleteEmployee = async (id) => {
 };
 
 module.exports = {
-  getAllEmployee,
+  getAllEmployees,
   getEmployeeById,
   createEmployee,
   updateEmployee,
