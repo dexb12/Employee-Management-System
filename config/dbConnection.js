@@ -3,9 +3,6 @@ require("dotenv").config({
   path: require("path").resolve(__dirname, "../.env"),
 });
 
-console.log("Database Name: ", process.env.DATABASE_NAME);
-console.log("DB_Password: ", process.env.MYSQL_PASSWORD);
-
 const pool = mysql
   .createPool({
     host: "localhost",

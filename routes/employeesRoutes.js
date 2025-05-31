@@ -1,9 +1,11 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
 const {
   getAllEmployees,
   getEmployeeById,
   createEmployee,
   updateEmployee,
+  deleteEmployee,
 } = require("../queries/employeeQueries");
 const router = express.Router();
 
@@ -20,7 +22,7 @@ router.get("/", async (req, res) => {
 // GET Employee by ID
 router.get("/:id", async (req, res) => {
   try {
-    const data = await getEmployeeById();
+    const data = await getEmployeeById(req.params.id);
 
     if (!data) {
       return res.status(404).json({ message: "Employee not found" });
@@ -49,10 +51,12 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ message: "Incomplete details" });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const result = await createEmployee(
       name,
       email,
-      password,
+      hashedPassword,
       department,
       position,
       hired_date
@@ -65,11 +69,11 @@ router.post("/", async (req, res) => {
 });
 
 // PUT Update Employee Record
-router.put("/", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    const { id, name, email, password, department, position, hired_date } =
+    const id = req.params.id;
+    const { name, email, password, department, position, hired_date } =
       req.body;
-
     if (
       !id ||
       !name ||
@@ -82,11 +86,13 @@ router.put("/", async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const result = await updateEmployee(
       id,
       name,
       email,
-      password,
+      hashedPassword,
       department,
       position,
       hired_date
@@ -98,3 +104,16 @@ router.put("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Delete Remove Employee
+router.delete("/:id", async (req, res) => {
+  try {
+    const result = await deleteEmployee(req.params.id);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error executing query", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+module.exports = router;

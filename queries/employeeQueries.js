@@ -21,6 +21,22 @@ const getEmployeeById = async (id) => {
   }
 };
 
+const getEmployeeByEmail = async (email) => {
+  try {
+    const [rows] = await pool.query(
+      ` 
+        SELECT * FROM employees
+        WHERE email = ?
+      `,
+      [email]
+    );
+    return rows[0];
+  } catch (error) {
+    console.error("Error fetching employee by email:", error);
+    throw new Error("Failed to fetch employee by email.");
+  }
+};
+
 const createEmployee = async (
   name,
   email,
@@ -88,6 +104,7 @@ const deleteEmployee = async (id) => {
 module.exports = {
   getAllEmployees,
   getEmployeeById,
+  getEmployeeByEmail,
   createEmployee,
   updateEmployee,
   deleteEmployee,
