@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Routes
 app.use("/attendance", attendanceRoutes);
-app.use("/employeeRoute", employeesRoutes);
+app.use("/employeesRoute", employeesRoutes);
 app.use("/authentication", authRoutes);
 
 app.listen(PORT, () => {
