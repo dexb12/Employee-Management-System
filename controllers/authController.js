@@ -53,6 +53,7 @@ const loginUser = async (req, res) => {
 
 const registerUser = async (req, res) => {
   const { name, email, password, department, position, hired_date } = req.body;
+  console.log(req.body);
 
   // Validate name, email and password if provided
   if (!name || !email || !password)
@@ -70,14 +71,16 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Creates a new employee in the database with the provided details.
-    const newEmployee = await createEmployee({
+    const newEmployee = await createEmployee(
       name,
       email,
-      password: hashedPassword,
+      hashedPassword,
       department,
       position,
-      hired_date,
-    });
+      hired_date
+    );
+
+    console.log(newEmployee);
 
     // Responds with a success message and the new employee’s ID if registration is successful.
     res.status(201).json({ success: true, employeeId: newEmployee.insertId });
